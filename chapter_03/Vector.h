@@ -3,14 +3,13 @@
 
 #include <cstddef>
 
-template <typename T>
-class Vector {
+template <typename T> class Vector {
 
 public:
-    Vector(std::size_t initial_size = 0); // 默认构造函数
-    Vector(const Vector& rhs); // 拷贝构造函数
-    Vector& operator = (const Vector& rhs); // 拷贝赋值运算符
-    T& operator [] (const std::size_t k) { return pointer[k]; } // 重载下标运算符
+    Vector(std::size_t initial_size = 0);
+    Vector(const Vector& rhs);
+    Vector& operator = (const Vector& rhs);
+    T& operator [] (const std::size_t k) { return pointer[k]; }
 
     std::size_t get_size() const { return the_size; }
     std::size_t get_capacity() const { return the_capacity; }
@@ -19,13 +18,21 @@ public:
     void push_back(T rhs);
     void insert(std::size_t k, T rhs);
     void erase(T rhs);
+    void reserve(std::size_t assigned_capacity);
+    const T& back() const { return pointer[the_size - 1]; }
+    T pop_back() { return pointer[the_size-- - 1]; }
 
-    ~Vector(); // 析构函数
+    T* begin() { return pointer; }
+    T* end() { return (pointer + the_size); }
+    const T* cbegin() const { return pointer; }
+    const T* cend() const { return (pointer + the_size); }
+
+    ~Vector();
 
 private:
-    std::size_t the_size;
-    std::size_t the_capacity;
-    T* pointer;
+    std::size_t the_size = 0;
+    std::size_t the_capacity = 0;
+    T* pointer = nullptr;
 
 };
 
@@ -33,13 +40,16 @@ private:
 
 template <typename T>
 Vector<T>::Vector(std::size_t initial_size) :
-    the_size(initial_size), the_capacity((initial_size == 0) ? 10 : initial_size * 2) {
-        pointer = new T[the_capacity];
-        for (std::size_t i = 0; i < the_size; ++i) pointer[i] = 0;
+    the_size(initial_size), the_capacity((initial_size == 0) ? 10 : initial_size * 2)
+{
+    pointer = new T[the_capacity];
+    for (std::size_t i = 0; i < the_size; ++i) pointer[i] = 0;
 }
 
 template <typename T>
-Vector<T>::Vector(const Vector<T>& rhs) {
+Vector<T>::Vector(const Vector<T>& rhs) :
+    the_size(rhs.the_size), the_capacity(rhs.the_capacity)
+{
     pointer = new T[rhs.the_capacity];
     for (std::size_t i = 0; i < rhs.the_size; ++i) {
         pointer[i] = (rhs.pointer)[i];
@@ -49,6 +59,8 @@ Vector<T>::Vector(const Vector<T>& rhs) {
 template <typename T>
 Vector<T>& Vector<T>::operator = (const Vector<T>& rhs) {
     if (this != &rhs) {
+        the_size = rhs.the_size;
+        the_capacity = rhs.get_capacity;
         delete[] pointer;
         pointer = new T[rhs.the_capacity];
         for (std::size_t i = 0; i < rhs.the_size; ++i) {
@@ -92,12 +104,58 @@ void Vector<T>::push_back(T rhs) {
 
 template <typename T>
 void Vector<T>::insert(std::size_t k, T rhs) {
-    // TODO
+    if (the_size < k) return;
+    if (the_size == k) {
+        this->push_back(rhs);
+        return;
+    }
+    if (the_size < the_capacity) {
+        the_size += 1;
+        std::size_t l;
+        for (l = k + 1; l < the_size; ++k, ++l) {
+            pointer[l] = pointer[k];
+        }
+        pointer[k] = rhs;
+    } else {
+        T* temp = new T[the_capacity * 2];
+        std::size_t i;
+
+        for (i = 0; i < k; ++i) temp[i] = pointer[i];
+        temp[i++] = rhs;
+        for (std::size_t l = k; l < the_size; ++l, ++i) {
+            temp[i] = pointer[l];
+        }
+
+        delete[] pointer;
+        pointer = temp;
+        ++the_size;
+    }
 }
 
 template <typename T>
 void Vector<T>::erase(T rhs) {
-    // TODO
+    std::size_t i;
+    for (i = 0; i < the_size; ++i) {
+        if (rhs == pointer[i]) break;
+    }
+    if (i < the_size) {
+        for (std::size_t j = i + 1; j < the_size; ++j, ++i) {
+            pointer[i] = pointer[j];
+        }
+        --the_size;
+    }
+}
+
+template <typename T>
+void Vector<T>::reserve(std::size_t assigned_capacity) {
+    if (assigned_capacity < the_capacity) return;
+    the_capacity = assigned_capacity;
+    T* temp = new T[the_capacity];
+    for (std::size_t i = 0; i < the_size; ++i) {
+        temp[i] = pointer[i];
+    }
+    delete[] pointer;
+    pointer = temp;
 }
 
 template <typename T>
