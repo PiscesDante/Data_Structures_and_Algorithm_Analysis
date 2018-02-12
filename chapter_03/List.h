@@ -6,6 +6,8 @@
 
 template <typename> struct Node;
 template <typename> class List;
+template <typename T>
+std::ostream& operator << (std::ostream& os, const List<T>& rhs);
 
 // =======================NODE==========================
 
@@ -23,6 +25,9 @@ struct Node {
 template <typename T>
 class List {
 
+friend class Node<T>;
+friend std::ostream& operator << <T>(std::ostream& os, const List<T>& rhs);
+
 public:
     List() : // 默认构造函数
         head(nullptr), tail(nullptr), the_size(0) { }
@@ -33,7 +38,9 @@ public:
     void push_back(T input_data);
     void push_front(T input_data);
     void insert(T target_data, T input_data);
-    // void erase(T target_data);
+    Node<T>* find(T target_data);
+    void erase(T target_data);
+    void reverse();
 
     ~List();
 
@@ -75,7 +82,6 @@ void List<T>::push_back(T input_data) {
         Node<T>* temp_new = new Node<T>(tail, input_data, nullptr);
         tail->next = temp_new;
         tail = temp_new;
-        temp_new = nullptr;
     }
     ++the_size;
 }
@@ -89,7 +95,6 @@ void List<T>::push_front(T input_data) {
         Node<T>* temp_new = new Node<T>(nullptr, input_data, head);
         head->prev = temp_new;
         head = temp_new;
-        temp_new = nullptr;
     }
 }
 
@@ -112,6 +117,40 @@ void List<T>::insert(T target_data, T input_data) {
     }
 }
 
+template <typename T>
+Node<T>* List<T>::find(T target_data) {
+    Node<T>* sentinel;
+    for (sentinel = head; sentinel && sentinel->data != target_data; sentinel = sentinel->next);
+    return sentinel;
+}
+
+template <typename T>
+void List<T>::erase(T target_data) {
+    Node<T>* pos = find(target_data);
+    if (pos) {
+        pos->next->prev = pos->prev;
+        pos->prev->next = pos->next;
+        delete pos;
+        pos = nullptr;
+    }
+}
+
+template <typename T>
+void List<T>::reverse() {
+    tail = head;
+    while (head) {
+        Node<T>* temp_next = head->next;
+        Node<T>* swap_temp_ptr = head->prev;
+        head->prev = head->next;
+        head->next = swap_temp_ptr;
+        if (temp_next) {
+            head = temp_next;
+        } else {
+            break;
+        }
+    }
+}
+
 // 析构函数：
 template <typename T>
 List<T>::~List() {
@@ -120,6 +159,16 @@ List<T>::~List() {
         delete head;
         head = temp_next;
     }
+    tail = nullptr;
+    the_size = 0;
+}
+
+template <typename T>
+std::ostream& operator << (std::ostream& os, const List<T>& rhs) {
+    for (Node<T>* node = rhs.head; node; node = node->next) {
+        os << node->data << " ";
+    }
+    return os;
 }
 
 #endif
