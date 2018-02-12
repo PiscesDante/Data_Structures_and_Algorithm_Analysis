@@ -35,12 +35,19 @@ public:
     List<T>& operator = (const List<T>& rhs); // 拷贝赋值运算符
     bool empty() const { return !head; }
     std::size_t size() const { return the_size; }
+    T& front() { return head->data; }
+    T& back() { return tail->data; }
+
     void push_back(T input_data);
     void push_front(T input_data);
+    T pop_back();
+    T pop_front();
+
     void insert(T target_data, T input_data);
     Node<T>* find(T target_data);
     void erase(T target_data);
     void reverse();
+    void clear();
 
     ~List();
 
@@ -65,7 +72,7 @@ List<T>::List(const List<T>& rhs) : List() {
 template <typename T>
 List<T>& List<T>::operator = (const List<T>& rhs) {
     if (this != &rhs) {
-        ~List();
+        clear();
         for (Node<T>* node = rhs.head; !node; node = node->next) push_back(node->data);
     }
     return *this;
@@ -96,6 +103,26 @@ void List<T>::push_front(T input_data) {
         head->prev = temp_new;
         head = temp_new;
     }
+}
+
+template <typename T>
+T pop_back() {
+    T ret = tail->data;
+    Node<T>* del = tail;
+    tail = tail->prev;
+    delete del;
+    del = nullptr;
+    return ret;
+}
+
+template <typename T>    
+T pop_front() {
+    T ret = head->data;
+    Node<T>* del = head;
+    head = head->next;
+    delete del;
+    del = nullptr;
+    return ret;
 }
 
 template <typename T>
@@ -151,6 +178,17 @@ void List<T>::reverse() {
     }
 }
 
+template <typename T>
+void List<T>::clear() {
+    while (head != nullptr) {
+        Node<T>* temp_next = head->next;
+        delete head;
+        head = temp_next;
+    }
+    tail = nullptr;
+    the_size = 0;
+}
+
 // 析构函数：
 template <typename T>
 List<T>::~List() {
@@ -160,7 +198,6 @@ List<T>::~List() {
         head = temp_next;
     }
     tail = nullptr;
-    the_size = 0;
 }
 
 template <typename T>
