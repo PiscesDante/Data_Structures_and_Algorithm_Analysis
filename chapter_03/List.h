@@ -106,7 +106,7 @@ void List<T>::push_front(T input_data) {
 }
 
 template <typename T>
-T pop_back() {
+T List<T>::pop_back() {
     T ret = tail->data;
     Node<T>* del = tail;
     tail = tail->prev;
@@ -116,7 +116,7 @@ T pop_back() {
 }
 
 template <typename T>    
-T pop_front() {
+T List<T>::pop_front() {
     T ret = head->data;
     Node<T>* del = head;
     head = head->next;
