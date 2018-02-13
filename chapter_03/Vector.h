@@ -3,17 +3,19 @@
 
 #include <cstddef>
 
-template <typename T> class Vector {
+template <typename T>
+class Vector {
 
 public:
-    Vector(std::size_t initial_size = 0);
-    Vector(const Vector& rhs);
-    Vector& operator = (const Vector& rhs);
+    Vector<T>(std::size_t initial_size = 0);
+    Vector<T>(const Vector& rhs);
+    Vector<T>& operator = (const Vector<T>& rhs);
     T& operator [] (const std::size_t k) { return pointer[k]; }
 
     std::size_t get_size() const { return the_size; }
     std::size_t get_capacity() const { return the_capacity; }
-    bool empty() const { return the_size == 0; }
+    bool empty() const { return !the_size; }
+
     void resize(std::size_t n);
     void push_back(T rhs);
     void insert(std::size_t k, T rhs);
