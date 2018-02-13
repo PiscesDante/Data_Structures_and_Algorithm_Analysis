@@ -103,6 +103,7 @@ void List<T>::push_front(T input_data) {
         head->prev = temp_new;
         head = temp_new;
     }
+    ++the_size;
 }
 
 template <typename T>
@@ -112,6 +113,7 @@ T List<T>::pop_back() {
     tail = tail->prev;
     delete del;
     del = nullptr;
+    --the_size;
     return ret;
 }
 
@@ -122,6 +124,7 @@ T List<T>::pop_front() {
     head = head->next;
     delete del;
     del = nullptr;
+    --the_size;
     return ret;
 }
 
@@ -138,6 +141,7 @@ void List<T>::insert(T target_data, T input_data) {
             pos->next = temp_new;
             temp_next->prev = temp_new;
             temp_new = nullptr;
+            ++the_size;
         }
     } else {
         push_back(input_data);
@@ -159,6 +163,7 @@ void List<T>::erase(T target_data) {
         pos->prev->next = pos->next;
         delete pos;
         pos = nullptr;
+        --the_size;
     }
 }
 
