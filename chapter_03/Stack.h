@@ -34,7 +34,7 @@ public:
     Stack<T>(const Stack<T>& rhs); // 拷贝构造函数
     Stack<T>& operator = (const Stack<T>& rhs); // 拷贝赋值运算符
 
-    bool empty() const { return !the_top; }
+    bool empty() const { return the_top == nullptr; }
     std::size_t size() const { return the_size; }
 
     T top() const;
@@ -79,13 +79,17 @@ void Stack<T>::push(T input_data) {
 // 弹出：
 template <typename T>
 T Stack<T>::pop() {
-    T ret = the_top->data;
-    Node<T>* del = the_top;
-    the_top = the_top->prev;
-    delete del;
-    del = nullptr;
-    --the_size;
-    return ret;
+    if (!empty()) {
+        T ret = the_top->data;
+        Node<T>* del = the_top;
+        the_top = the_top->prev;
+        delete del;
+        del = nullptr;
+        --the_size;
+        return ret;
+    } else {
+        return T();
+    }
 }
 
 // 清空：

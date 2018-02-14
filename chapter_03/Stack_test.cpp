@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
     // std::cout << stck << std::endl;
     for (std::size_t i = 0; i < 7; ++i) stck.push(i);
     std::cout << stck << std::endl;
-    stck.pop();
+    std::cout << stck.pop() << std::endl;
     std::cout << stck << std::endl;
 
     return 0;
