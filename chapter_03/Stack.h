@@ -16,7 +16,7 @@ template <typename T>
 struct Node {
     T data;
     Node<T>* prev;
-    Node<T>(Node<T>* p = nullptr, T d = T()) :
+    Node(Node<T>* p = nullptr, T d = T()) :
         prev(p), data(d) { }
 };
 
@@ -29,9 +29,9 @@ friend struct Node<T>;
 friend std::ostream& operator << <T>(std::ostream& os, const Stack<T>& rhs);
 
 public:
-    Stack<T>() : // 构造函数
+    Stack() : // 构造函数
         the_top(nullptr), the_size(0) { }
-    Stack<T>(const Stack<T>& rhs); // 拷贝构造函数
+    Stack(const Stack& rhs); // 拷贝构造函数
     Stack<T>& operator = (const Stack<T>& rhs); // 拷贝赋值运算符
 
     bool empty() const { return the_top == nullptr; }

@@ -7,9 +7,9 @@ template <typename T>
 class Vector {
 
 public:
-    Vector<T>(std::size_t initial_size = 0);
-    Vector<T>(const Vector& rhs);
-    Vector<T>& operator = (const Vector<T>& rhs);
+    Vector(std::size_t initial_size = 0);
+    Vector(const Vector& rhs);
+    Vector& operator = (const Vector& rhs);
     T& operator [] (const std::size_t k) { return pointer[k]; }
 
     std::size_t get_size() const { return the_size; }
@@ -49,7 +49,7 @@ Vector<T>::Vector(std::size_t initial_size) :
 }
 
 template <typename T>
-Vector<T>::Vector(const Vector<T>& rhs) :
+Vector<T>::Vector(const Vector& rhs) :
     the_size(rhs.the_size), the_capacity(rhs.the_capacity)
 {
     pointer = new T[rhs.the_capacity];
@@ -121,13 +121,11 @@ void Vector<T>::insert(std::size_t k, T rhs) {
     } else {
         T* temp = new T[the_capacity * 2];
         std::size_t i;
-
         for (i = 0; i < k; ++i) temp[i] = pointer[i];
         temp[i++] = rhs;
         for (std::size_t l = k; l < the_size; ++l, ++i) {
             temp[i] = pointer[l];
         }
-
         delete[] pointer;
         pointer = temp;
         ++the_size;

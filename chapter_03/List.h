@@ -16,7 +16,7 @@ struct Node {
     Node<T>* prev;
     T data;
     Node<T>* next;
-    Node<T>(Node<T>* p = nullptr, T d = T(), Node<T>* n = nullptr) :
+    Node(Node<T>* p = nullptr, T d = T(), Node<T>* n = nullptr) :
         prev(p), data(d), next(n) { }
 };
 
@@ -29,10 +29,11 @@ friend struct Node<T>;
 friend std::ostream& operator << <T>(std::ostream& os, const List<T>& rhs);
 
 public:
-    List<T>() : // 默认构造函数
+    List() : // 默认构造函数
         head(nullptr), tail(nullptr), the_size(0) { }
-    List<T>(const List<T>& rhs); // 拷贝构造函数
+    List(const List& rhs); // 拷贝构造函数
     List<T>& operator = (const List<T>& rhs); // 拷贝赋值运算符
+
     bool empty() const { return !head; }
     std::size_t size() const { return the_size; }
     T& front() { return head->data; }
@@ -62,7 +63,7 @@ private:
 
 // 拷贝构造函数
 template <typename T>
-List<T>::List(const List<T>& rhs) : List() {
+List<T>::List(const List& rhs) : List() {
     if (!rhs.empty()) {
         for (Node<T>* node = rhs.head; !node; node = node->next) push_back(node->data);
     }
