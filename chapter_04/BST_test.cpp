@@ -8,8 +8,9 @@ int main(int argc, char** argv) {
     bst.insert(17);
     bst.insert(5);
     bst.printTree();
-    bst.makeEmpty();
-    std::cout << bst.isEmpty() << std::endl;
+
+    bst.remove(17);
+    bst.printTree();
 
     return 0;
 }

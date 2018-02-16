@@ -56,12 +56,13 @@ private:
     void insert(const T& x, BinaryNode<T>*& rt);
     void printTree(const BinaryNode<T>* rt);
     void freeTree(BinaryNode<T>*& rt);
+    void remove(const T& x, BinaryNode<T>*& node_ptr);
+    BinaryNode<T>*& find(const T& x);
+    BinaryNode<T>*& findMin(const BinaryNode<T>*& node_ptr);
 
 };
 
 // =================================================================
-
-// ==========function findMin===========
 
 template <typename T>
 const T BinarySearchTree<T>::findMin() const {
@@ -75,8 +76,6 @@ const T BinarySearchTree<T>::findMin() const {
     }
 }
 
-// ==========function findMax===========
-
 template <typename T>
 const T BinarySearchTree<T>::findMax() const {
     if (root == nullptr) return T();
@@ -88,8 +87,6 @@ const T BinarySearchTree<T>::findMax() const {
             return ptr->element;
     }
 }
-
-// ==========function ~BinarySearchTree=============
 
 template <typename T>
 void BinarySearchTree<T>::freeTree(BinaryNode<T>*& rt) {
@@ -106,8 +103,6 @@ BinarySearchTree<T>::~BinarySearchTree() {
     if (root) freeTree(root);
 }
 
-// ===========function printTree=============
-
 template <typename T>
 void BinarySearchTree<T>::printTree(const BinaryNode<T>* rt) {
     if (rt == nullptr) return;
@@ -121,14 +116,10 @@ void BinarySearchTree<T>::printTree() {
     printTree(root);
 }
 
-// ===========function makeEmpty==============
-
 template <typename T>
 void BinarySearchTree<T>::makeEmpty() {
     if (root) freeTree(root);
 }
-
-// ===========function insert=============
 
 template <typename T>
 void BinarySearchTree<T>::insert(const T& x, BinaryNode<T>*& rt) {
@@ -156,8 +147,6 @@ void BinarySearchTree<T>::insert(const T& x) {
     insert(x, root);
 }
 
-// ===========function contains===========
-
 template <typename T>
 bool BinarySearchTree<T>::contains(const T& x) const {
     BinaryNode<T>* ptr = root;
@@ -173,13 +162,53 @@ bool BinarySearchTree<T>::contains(const T& x) const {
     return false;
 }
 
-// =========function remove===========
+template <typename T>
+BinaryNode<T>*& BinarySearchTree<T>::find(const T& x) {
+    BinaryNode<T>*& ptr = root;
+    while (ptr) {
+        if (x < ptr->element) {
+            ptr = ptr->left_child;
+        } else if (x > ptr->element) {
+            ptr = ptr->right_child;
+        } else {
+            return ptr;
+        }
+    }
+    return ptr;
+}
+
+// ===========================working zone============================
+
+template <typename T>
+BinaryNode<T>*& BinarySearchTree<T>::findMin(const BinaryNode<T>*& node_ptr) {
+    BinaryNode<T>*& res = node_ptr;
+    while (res->left_child) {
+        res = res->left_child;
+    }
+    return res;
+}
+
+template <typename T>
+void BinarySearchTree<T>::remove(const T& x, BinaryNode<T>*& node_ptr) {
+    if (node_ptr == nullptr) return; // 如果传入的指针无效，则直接返回
+    if (x < node_ptr->element) {
+        remove(x, node_ptr->left_child);
+    } else if (x > node_ptr->element) {
+        remove(x, node_ptr->right_child);
+    } else if (node_ptr->left_child != nullptr && node_ptr->right_child != nullptr) { // 两个孩子
+        node_ptr->element = findMin(node_ptr->right_child)->element;
+        remove(node_ptr->element, node_ptr->right_child);
+    } else {
+        BinaryNode<T>* old_node = node_ptr;
+        node_ptr = (node_ptr->left_child != nullptr) ? node_ptr->left_child : node_ptr->right_child;
+        delete old_node;
+        old_node = nullptr;
+    }
+}
 
 template <typename T>
 void BinarySearchTree<T>::remove(const T& x) {
-    
+    remove(x, root);
 }
-
-// ====================================================================
 
 #endif
