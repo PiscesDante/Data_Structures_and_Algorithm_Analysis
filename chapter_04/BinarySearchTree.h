@@ -177,8 +177,6 @@ BinaryNode<T>*& BinarySearchTree<T>::find(const T& x) {
 	return ptr;
 }
 
-// ===========================working zone============================
-
 template <typename T>
 BinaryNode<T>* BinarySearchTree<T>::findMin(BinaryNode<T>* node_ptr) {
 	BinaryNode<T>* res = node_ptr;
