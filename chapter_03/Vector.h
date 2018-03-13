@@ -2,6 +2,7 @@
 #define VECTOR_H
 
 #include <cstddef>
+#include <utility>
 
 template <typename T>
 class Vector {
@@ -79,10 +80,10 @@ void Vector<T>::resize(std::size_t n) {
     std::size_t i = 0;
     T* temp_array = new T[temp_capacity];
     if (n <= the_size) {
-        for (std::size_t i = 0; i < n; ++i) temp_array[i] = pointer[i];
+        for (std::size_t i = 0; i < n; ++i) temp_array[i] = std::move(pointer[i]);
     } else {
         std::size_t i;
-        for (i = 0; i < the_size; ++i) temp_array[i] = pointer[i];
+        for (i = 0; i < the_size; ++i) temp_array[i] = std::move(pointer[i]);
         for (; i < n; ++i) temp_array[i] = 0;
     }
     delete[] pointer;

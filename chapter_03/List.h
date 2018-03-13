@@ -9,7 +9,7 @@ template <typename> class List;
 template <typename T>
 std::ostream& operator << (std::ostream& os, const List<T>& rhs);
 
-// =======================NODE==========================
+// ===============================NODE=====================================
 
 template <typename T>
 struct Node {
@@ -20,7 +20,7 @@ struct Node {
         prev(p), data(d), next(n) { }
 };
 
-// ========================LIST==========================
+// ===============================LIST=====================================
 
 template <typename T>
 class List {

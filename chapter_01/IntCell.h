@@ -30,7 +30,7 @@ public:
     /**
      * Return the stored value.
     */
-    inline int read() const { return stored_value; }
+    int read() const { return stored_value; }
 
     /**
      * Change the stored value to x.
