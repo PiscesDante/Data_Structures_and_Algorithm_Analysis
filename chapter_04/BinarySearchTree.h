@@ -18,7 +18,7 @@ public:
     // 普通构造函数
     BinaryNode(const T& theElem, BinaryNode* lt = nullptr, BinaryNode* rt = nullptr) :
         element(theElem), left_child(lt), right_child(rt) { }
-    // 右值构造函数
+    // 移动构造函数
     BinaryNode(T&& theElem, BinaryNode* lt = nullptr, BinaryNode* rt = nullptr) :
         element(std::move(theElem)), left_child(lt), right_child(rt) { }
 
