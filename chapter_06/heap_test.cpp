@@ -2,20 +2,17 @@
 
 #include <random>
 
-int main() {
-
-    BinaryHeap<int> bh;
+int main(int argc, char** argv) {
+    PriorityQueue<int> pq;
     std::random_device rd;
-    for (int i = 0; i < 20; ++i) {
-        bh.insert(rd() % 100);
+    for (int i = 0; i < 10; ++i) {
+        pq.insert(rd() % 100);
     }
-    bh.printContent();
-
-    std::cout << "=============================" << std::endl;
-
+    std::cout << pq << std::endl;
     for (int i = 0; i < 15; ++i) {
-        bh.deleteMin();
-        bh.printContent();
+        std::cout << pq.getMax() << std::endl;
+        pq.delMax();
+        std::cout << pq << std::endl;
     }
     return 0;
 }
