@@ -70,9 +70,33 @@ std::vector<int> adj(int input_vertex) {
 // ==============================================================
 
 int get_degree(const Graph& rhs, const int input_vertex) {
-
+    return (rhs.m_graph)[input_vertex].size();
 }
 
-int max_degree(const Graph& rhs);
-int avg_degree(const Graph& rhs);
-int number_of_self_loop(const Graph& rhs);
+int max_degree(const Graph& rhs) {
+    int max = 0;
+    for (auto v : rhs.m_graph) {
+        if (v.size() > max) max = v.size();
+    }
+    return max;
+}
+
+int avg_degree(const Graph& rhs) {
+    int sum_degree = 0;
+    int number_of_vertex = rhs.m_graph.size();
+    for (auto each_v : rhs.m_graph) {
+        sum_degree += each_v.size();
+    }
+    return sum_degree / number_of_vertex;
+}
+
+int number_of_self_loop(const Graph& rhs) {
+    int self_loop = 0;
+    int len = rhs.m_graph.size();
+    for (int vtx = 0; vtx < len; ++vtx) {
+        for (int sub_vtx : rhs.m_graph[vtx]) {
+            if (sub_vtx == vtx) self_loop += 1;
+        }
+    }
+    return self_loop;
+}
